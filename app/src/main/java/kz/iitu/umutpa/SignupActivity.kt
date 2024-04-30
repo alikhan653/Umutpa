@@ -5,13 +5,17 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Patterns
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +40,7 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var dob: EditText
     private lateinit var password_: EditText
     private lateinit var passwordConfirm: EditText
+    private lateinit var roleSpinner: Spinner
     private var imageUri: Uri? = null
     private var imageSelected: Boolean = false
     private lateinit var imageSelectError: TextView
@@ -58,8 +63,10 @@ class SignupActivity : AppCompatActivity() {
         full_name = findViewById(R.id.signup_name)
         email_ = findViewById(R.id.signup_email)
         password_ = findViewById(R.id.signup_password)
+        roleSpinner = findViewById(R.id.signup_spinner_role)
         dob = findViewById(R.id.signup_dob)
         passwordConfirm = findViewById(R.id.signup_password_confirm)
+        setupRoleSpinner()
 
         imageView = findViewById(R.id.signup_image_upload)
         imageView.setOnClickListener {
@@ -79,7 +86,11 @@ class SignupActivity : AppCompatActivity() {
                 }
             }
 
-            val datePickerDialog = DatePickerDialog(this)
+            val datePickerDialog = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                DatePickerDialog(this)
+            } else {
+                TODO("VERSION.SDK_INT < N")
+            }
             datePickerDialog.setOnDateSetListener { view, year, month, dayOfMonth ->
                 val date = "$year/$month/$dayOfMonth"
                 dob.setText(date)
@@ -223,15 +234,16 @@ class SignupActivity : AppCompatActivity() {
                     full_name.text.toString(),
                     dob.text.toString(),
                     email_.text.toString(),
-                    imageUrl
+                    imageUrl,
+                    roleSpinner.selectedItem.toString()
                 )
             }
         }
     }
 
-    private fun saveData(fullName: String, dob: String, email: String, imageUrl: String) {
+    private fun saveData(fullName: String, dob: String, email: String, imageUrl: String, role:String) {
 
-        val mUserData = UserDataModel(fullName, dob, email, imageUrl)
+        val mUserData = UserDataModel(fullName, dob, email, imageUrl,role)
         val user: FirebaseUser? = mAuth.currentUser
 
         if (user != null) {
@@ -244,6 +256,31 @@ class SignupActivity : AppCompatActivity() {
 
         } else {
             Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun setupRoleSpinner() {
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.spinner_role_string,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            roleSpinner?.adapter = adapter
+        }
+
+        roleSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
         }
     }
 }

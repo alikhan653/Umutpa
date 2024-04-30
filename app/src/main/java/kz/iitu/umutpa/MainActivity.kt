@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kz.iitu.umutpa.dailyroutine.DailyRoutineFragment
 import kz.iitu.umutpa.dashboard.DashbaordFragment
+import kz.iitu.umutpa.profile.DirectionFragment
 import kz.iitu.umutpa.profile.ProfileFragment
 
 class MainActivity : AppCompatActivity() {
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                     supportActionBar?.title = resources.getString(R.string.daily_routine)
                 }
                 R.id.navigation_profile -> {
-                    fragment = ProfileFragment()
+                    fragment = DirectionFragment()
                     supportActionBar?.title = resources.getString(R.string.profile)
 
                 }

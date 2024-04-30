@@ -28,4 +28,12 @@
         <item>Add Appointment</item>
         <item>Add medication</item>
     </string-array>
+
+    <string-array name="spinner_role_string">
+        <item>Patient</item>
+        <item>Relative</item>
+        <item>Doctor</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
