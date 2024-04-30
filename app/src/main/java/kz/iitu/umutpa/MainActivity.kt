@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                     supportActionBar?.title = resources.getString(R.string.daily_routine)
                 }
                 R.id.navigation_profile -> {
-                    fragment = DirectionFragment()
+                    fragment = ProfileFragment()
                     supportActionBar?.title = resources.getString(R.string.profile)
 
                 }
